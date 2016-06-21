@@ -1,0 +1,14 @@
+[package]
+name = "scene_renderer"
+version = "0.1.0"
+authors = ["nathanfaucett <nathanfaucett@gmail.com>"]
+
+keywords = ["scene_renderer"]
+description = "scene renderer"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/nathanfaucett/rs-scene_renderer.git"
+homepage = "https://github.com/nathanfaucett/rs-scene_renderer"
+
+[dependencies.scene_graph]
+git = "https://github.com/nathanfaucett/rs-scene_graph.git"
