@@ -45,9 +45,6 @@ impl Renderer for SomeRenderer {
 
     fn order(&self) -> usize { 0 }
 
-    fn init(&self) {}
-    fn destroy(&self) {}
-
     fn before_render(&self) {}
     fn after_render(&self) {}
     fn render(&self) {}

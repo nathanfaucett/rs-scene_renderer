@@ -17,9 +17,6 @@ pub trait Renderer: Any {
 
     fn order(&self) -> usize;
 
-    fn init(&self);
-    fn destroy(&self);
-
     fn before_render(&self);
     fn after_render(&self);
     fn render(&self);

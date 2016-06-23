@@ -11,7 +11,6 @@ use renderer::Renderer;
 
 struct SceneRendererData {
     scene: Scene,
-    sorted: bool,
     renderers: Vec<Arc<RefCell<Box<Renderer>>>>,
     renderers_map: BTreeMap<Id, Arc<RefCell<Box<Renderer>>>>
 }
@@ -27,15 +26,10 @@ impl SceneRenderer {
         SceneRenderer {
             data: Arc::new(RefCell::new(SceneRendererData {
                 scene: scene,
-                sorted: false,
                 renderers: Vec::new(),
                 renderers_map: BTreeMap::new(),
             }))
         }
-    }
-
-    pub fn sorted(&self) -> bool {
-        self.data.borrow().sorted
     }
 
     pub fn scene(&self) -> Scene {
@@ -43,9 +37,6 @@ impl SceneRenderer {
     }
 
     pub fn render(&self) -> &Self {
-        if !self.sorted() {
-            self.sort_renderers();
-        }
         for renderer in self.data.borrow().renderers.iter() {
             renderer.borrow().render();
         }
@@ -60,12 +51,7 @@ impl SceneRenderer {
             let renderer_wrap = Arc::new(RefCell::new(Box::new(renderer) as Box<Renderer>));
             self.data.borrow_mut().renderers.push(renderer_wrap.clone());
             self.data.borrow_mut().renderers_map.insert(id, renderer_wrap);
-
-            if self.scene().initted() {
-                self.sort_renderers();
-            } else {
-                self.data.borrow_mut().sorted = false;
-            }
+            self.sort_renderers();
         }
         self
     }
@@ -107,6 +93,5 @@ impl SceneRenderer {
         self.data.borrow_mut().renderers.sort_by(|a, b| {
             a.borrow().order().cmp(&b.borrow().order())
         });
-        self.data.borrow_mut().sorted = true;
     }
 }
