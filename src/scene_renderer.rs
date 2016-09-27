@@ -32,7 +32,7 @@ impl SceneRenderer {
         }
     }
 
-    pub fn scene(&self) -> Scene {
+    pub fn get_scene(&self) -> Scene {
         self.data.borrow().scene.clone()
     }
 
@@ -64,7 +64,7 @@ impl SceneRenderer {
         if self.data.borrow().renderers_map.contains_key(&id) {
             {
                 let ref mut renderers = self.data.borrow_mut().renderers;
-                match renderers.iter().position(|c| c.borrow().id() == id) {
+                match renderers.iter().position(|c| c.borrow().get_id() == id) {
                     Some(i) => {
                         renderers[i].borrow_mut().set_scene_renderer(None);
                         renderers.remove(i);
@@ -91,7 +91,7 @@ impl SceneRenderer {
 
     fn sort_renderers(&self) {
         self.data.borrow_mut().renderers.sort_by(|a, b| {
-            a.borrow().order().cmp(&b.borrow().order())
+            a.borrow().get_order().cmp(&b.borrow().get_order())
         });
     }
 }
