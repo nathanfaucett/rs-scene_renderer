@@ -8,7 +8,7 @@ extern crate collections;
 extern crate scene_graph;
 extern crate scene_renderer;
 
-use alloc::arc::Arc;
+use alloc::rc::Rc;
 use core::cell::RefCell;
 
 use scene_graph::{Id, Scene};
@@ -21,12 +21,12 @@ struct SomeRendererData {
 }
 #[derive(Clone)]
 pub struct SomeRenderer {
-    data: Arc<RefCell<SomeRendererData>>,
+    data: Rc<RefCell<SomeRendererData>>,
 }
 impl SomeRenderer {
     pub fn new() -> Self {
         SomeRenderer {
-            data: Arc::new(RefCell::new(SomeRendererData {
+            data: Rc::new(RefCell::new(SomeRendererData {
                 scene_renderer: None,
             }))
         }

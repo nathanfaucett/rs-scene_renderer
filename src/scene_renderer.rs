@@ -1,7 +1,7 @@
 use collections::boxed::Box;
 use collections::vec::Vec;
 use collections::btree_map::BTreeMap;
-use alloc::arc::Arc;
+use alloc::rc::Rc;
 use core::cell::RefCell;
 
 use scene_graph::{Id, Scene};
@@ -11,20 +11,20 @@ use renderer::Renderer;
 
 struct SceneRendererData {
     scene: Scene,
-    renderers: Vec<Arc<RefCell<Box<Renderer>>>>,
-    renderers_map: BTreeMap<Id, Arc<RefCell<Box<Renderer>>>>
+    renderers: Vec<Rc<RefCell<Box<Renderer>>>>,
+    renderers_map: BTreeMap<Id, Rc<RefCell<Box<Renderer>>>>
 }
 
 #[derive(Clone)]
 pub struct SceneRenderer {
-    data: Arc<RefCell<SceneRendererData>>,
+    data: Rc<RefCell<SceneRendererData>>,
 }
 
 impl SceneRenderer {
 
     pub fn new(scene: Scene) -> Self {
         SceneRenderer {
-            data: Arc::new(RefCell::new(SceneRendererData {
+            data: Rc::new(RefCell::new(SceneRendererData {
                 scene: scene,
                 renderers: Vec::new(),
                 renderers_map: BTreeMap::new(),
@@ -48,7 +48,7 @@ impl SceneRenderer {
 
         if !self.data.borrow().renderers_map.contains_key(&id) {
             renderer.set_scene_renderer(Some(self.clone()));
-            let renderer_wrap = Arc::new(RefCell::new(Box::new(renderer) as Box<Renderer>));
+            let renderer_wrap = Rc::new(RefCell::new(Box::new(renderer) as Box<Renderer>));
             self.data.borrow_mut().renderers.push(renderer_wrap.clone());
             self.data.borrow_mut().renderers_map.insert(id, renderer_wrap);
             self.sort_renderers();
