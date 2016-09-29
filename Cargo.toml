@@ -15,3 +15,6 @@ git = "https://github.com/nathanfaucett/rs-impl_any.git"
 
 [dependencies.scene_graph]
 git = "https://github.com/nathanfaucett/rs-scene_graph.git"
+
+[dependencies.shared]
+git = "https://github.com/nathanfaucett/rs-shared.git"
