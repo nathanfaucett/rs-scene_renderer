@@ -5,6 +5,8 @@
 extern crate alloc;
 extern crate collections;
 
+#[macro_use]
+extern crate impl_any;
 extern crate scene_graph;
 
 

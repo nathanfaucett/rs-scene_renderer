@@ -34,16 +34,16 @@ impl SomeRenderer {
 }
 impl Renderer for SomeRenderer {
 
-    fn id(&self) -> Id { Id::of::<SomeRenderer>() }
+    fn get_id(&self) -> Id { Id::of::<SomeRenderer>() }
 
-    fn scene_renderer(&self) -> Option<SceneRenderer> {
+    fn get_scene_renderer(&self) -> Option<SceneRenderer> {
         self.data.borrow().scene_renderer.clone()
     }
     fn set_scene_renderer(&self, renderer: Option<SceneRenderer>) {
         self.data.borrow_mut().scene_renderer = renderer;
     }
 
-    fn order(&self) -> usize { 0 }
+    fn get_order(&self) -> usize { 0 }
 
     fn before_render(&self) {}
     fn after_render(&self) {}
