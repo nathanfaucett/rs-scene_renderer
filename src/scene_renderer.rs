@@ -1,4 +1,4 @@
-use collections::boxed::Box;
+use alloc::boxed::Box;
 use collections::vec::Vec;
 use collections::btree_map::BTreeMap;
 

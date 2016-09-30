@@ -1,7 +1,11 @@
-#![feature(collections, raw, get_type_id)]
+#![feature(alloc)]
+#![feature(collections)]
+#![feature(get_type_id)]
+#![feature(raw)]
 #![no_std]
 
 
+extern crate alloc;
 extern crate collections;
 
 #[macro_use]

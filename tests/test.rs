@@ -1,16 +1,17 @@
+#![feature(alloc)]
+#![feature(collections)]
 #![no_std]
-#![feature(collections, alloc)]
 
 
 extern crate alloc;
 extern crate collections;
 
+extern crate shared;
 extern crate scene_graph;
+
 extern crate scene_renderer;
 
-use alloc::rc::Rc;
-use core::cell::RefCell;
-
+use shared::Shared;
 use scene_graph::{Id, Scene};
 
 use scene_renderer::{SceneRenderer, Renderer};
@@ -21,14 +22,14 @@ struct SomeRendererData {
 }
 #[derive(Clone)]
 pub struct SomeRenderer {
-    data: Rc<RefCell<SomeRendererData>>,
+    data: Shared<SomeRendererData>,
 }
 impl SomeRenderer {
     pub fn new() -> Self {
         SomeRenderer {
-            data: Rc::new(RefCell::new(SomeRendererData {
+            data: Shared::new(SomeRendererData {
                 scene_renderer: None,
-            }))
+            })
         }
     }
 }
@@ -37,10 +38,10 @@ impl Renderer for SomeRenderer {
     fn get_id(&self) -> Id { Id::of::<SomeRenderer>() }
 
     fn get_scene_renderer(&self) -> Option<SceneRenderer> {
-        self.data.borrow().scene_renderer.clone()
+        self.data.scene_renderer.clone()
     }
     fn set_scene_renderer(&mut self, renderer: Option<SceneRenderer>) {
-        self.data.borrow_mut().scene_renderer = renderer;
+        self.data.scene_renderer = renderer;
     }
 
     fn get_order(&self) -> usize { 0 }
@@ -51,7 +52,7 @@ impl Renderer for SomeRenderer {
 }
 impl PartialEq<SomeRenderer> for SomeRenderer {
     fn eq(&self, other: &SomeRenderer) -> bool {
-        (&*self.data.borrow() as *const _) == (&*other.data.borrow() as *const _)
+        (&*self.data as *const _) == (&*other.data as *const _)
     }
     fn ne(&self, other: &SomeRenderer) -> bool {
         !self.eq(other)
