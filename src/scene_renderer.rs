@@ -1,17 +1,23 @@
 use alloc::boxed::Box;
-use collections::vec::Vec;
-use collections::btree_map::BTreeMap;
 
-use shared::Shared;
 use scene_graph::{Id, Scene};
+use hash_map::HashMap;
+use vector::Vector;
+use iterable::Iterable;
+use iterable_mut::IterableMut;
+use map::Map;
+use stack::Stack;
+use insert::Insert;
+use remove::Remove;
+use shared::Shared;
 
 use renderer::Renderer;
 
 
 struct SceneRendererData {
     scene: Scene,
-    renderers: Vec<Shared<Box<Renderer>>>,
-    renderers_map: BTreeMap<Id, Shared<Box<Renderer>>>
+    renderers: Vector<Shared<Box<Renderer>>>,
+    renderers_map: HashMap<Id, Shared<Box<Renderer>>>
 }
 
 #[derive(Clone)]
@@ -25,8 +31,8 @@ impl SceneRenderer {
         SceneRenderer {
             data: Shared::new(SceneRendererData {
                 scene: scene,
-                renderers: Vec::new(),
-                renderers_map: BTreeMap::new(),
+                renderers: Vector::new(),
+                renderers_map: HashMap::new(),
             })
         }
     }
@@ -66,7 +72,7 @@ impl SceneRenderer {
                 match renderers.iter().position(|c| c.get_id() == id) {
                     Some(i) => {
                         renderers[i].set_scene_renderer(None);
-                        renderers.remove(i);
+                        renderers.remove(&i);
                     },
                     None => (),
                 }
