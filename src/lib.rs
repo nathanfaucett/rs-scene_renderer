@@ -22,9 +22,9 @@ extern crate insert;
 extern crate remove;
 
 
-mod scene_renderer;
 mod renderer;
+mod scene_renderer;
 
 
-pub use scene_renderer::SceneRenderer;
 pub use renderer::Renderer;
+pub use scene_renderer::SceneRenderer;

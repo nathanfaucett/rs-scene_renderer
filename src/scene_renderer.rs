@@ -16,8 +16,9 @@ use renderer::Renderer;
 
 struct SceneRendererData {
     scene: Scene,
+
+    renderers_map: HashMap<Id, Shared<Box<Renderer>>>,
     renderers: Vector<Shared<Box<Renderer>>>,
-    renderers_map: HashMap<Id, Shared<Box<Renderer>>>
 }
 
 #[derive(Clone)]
@@ -31,8 +32,9 @@ impl SceneRenderer {
         SceneRenderer {
             data: Shared::new(SceneRendererData {
                 scene: scene,
-                renderers: Vector::new(),
+                
                 renderers_map: HashMap::new(),
+                renderers: Vector::new(),
             })
         }
     }
