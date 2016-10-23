@@ -46,6 +46,9 @@ impl Renderer for SomeRenderer {
 
     fn get_order(&self) -> usize { 0 }
 
+    fn init(&mut self) {}
+    fn clear(&mut self) {}
+
     fn before_render(&mut self) {}
     fn after_render(&mut self) {}
     fn render(&mut self) {}

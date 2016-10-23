@@ -14,6 +14,9 @@ pub trait Renderer: Any {
 
     fn get_order(&self) -> usize;
 
+    fn init(&mut self);
+    fn clear(&mut self);
+
     fn before_render(&mut self);
     fn after_render(&mut self);
     fn render(&mut self);

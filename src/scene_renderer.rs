@@ -17,6 +17,8 @@ use renderer::Renderer;
 struct SceneRendererData {
     scene: Scene,
 
+    initted: bool,
+
     renderers_map: HashMap<Id, Shared<Box<Renderer>>>,
     renderers: Vector<Shared<Box<Renderer>>>,
 }
@@ -32,7 +34,9 @@ impl SceneRenderer {
         SceneRenderer {
             data: Shared::new(SceneRendererData {
                 scene: scene,
-                
+
+                initted: false,
+
                 renderers_map: HashMap::new(),
                 renderers: Vector::new(),
             })
@@ -43,7 +47,33 @@ impl SceneRenderer {
         self.data.scene.clone()
     }
 
-    pub fn render(&mut self) -> &Self {
+    pub fn init(&mut self) -> &mut Self {
+        if !self.data.initted {
+            self.data.initted = true;
+
+            for renderer in self.data.renderers.iter_mut() {
+                renderer.init();
+            }
+        }
+        self
+    }
+
+    pub fn clear(&mut self) -> &mut Self {
+        for renderer in self.data.renderers.iter_mut() {
+            renderer.clear();
+        }
+        {
+            let ref mut data = self.data;
+
+            data.initted = false;
+
+            data.renderers_map.clear();
+            data.renderers.clear();
+        }
+        self
+    }
+
+    pub fn render(&mut self) -> &mut Self {
         for renderer in self.data.renderers.iter_mut() {
             renderer.render();
         }
@@ -55,10 +85,14 @@ impl SceneRenderer {
 
         if !self.data.renderers_map.contains_key(&id) {
             renderer.set_scene_renderer(Some(self.clone()));
-            let renderer_wrap = Shared::new(Box::new(renderer) as Box<Renderer>);
+            let renderer_wrap = Shared::new(Box::new(renderer.clone()) as Box<Renderer>);
             self.data.renderers.push(renderer_wrap.clone());
             self.data.renderers_map.insert(id, renderer_wrap);
             self.sort_renderers();
+
+            if self.data.initted {
+                renderer.init();
+            }
         }
         self
     }
@@ -73,7 +107,11 @@ impl SceneRenderer {
                 let ref mut renderers = self.data.renderers;
                 match renderers.iter().position(|c| c.get_id() == id) {
                     Some(i) => {
-                        renderers[i].set_scene_renderer(None);
+                        {
+                            let ref mut renderer = renderers[i];
+                            renderer.clear();
+                            renderer.set_scene_renderer(None);
+                        }
                         renderers.remove(&i);
                     },
                     None => (),
